@@ -1,0 +1,29 @@
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+skinparam linetype ortho
+
+package "CommonPlayer" as CP {
+    class Player {
+        -int turnSpeed
+        -int moveSpeed
+    }
+}
+
+package "Player" as PM {
+    class PlayerPlugin {
+        +start()
+        +stop()
+    }
+
+    class PlayerControlSystem {
+        +process()
+    }
+}
+
+PM ..> CP : requires
+
+PlayerPlugin --> Player : instantiates
+PlayerControlSystem --> Player : updates/uses
+
+@enduml
