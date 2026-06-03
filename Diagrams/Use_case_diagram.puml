@@ -1,0 +1,29 @@
+@startuml
+
+left to right direction
+
+rectangle "Game" {
+    usecase "Start" as UC1
+    usecase "Move" as UC2
+    usecase "Shoot" as UC3
+    usecase "Die" as UC4
+    usecase "Quit" as UC5
+}
+
+actor "Player" as player
+
+player --> UC1
+player --> UC2
+player --> UC3
+player --> UC4
+player --> UC5
+
+rectangle "Component" {
+    usecase "Remove Component" as UC6
+    usecase "Game still runs, just\nwithout the removed component" as UC7
+    UC6 .> UC7 : <<include>>
+}
+
+player --> UC6
+
+@enduml

@@ -1,0 +1,23 @@
+@startuml
+title Entity Class Diagram
+
+class Entity
+
+class Player extends Entity
+class Enemy extends Entity
+class Asteroid extends Entity
+class Bullet extends Entity
+
+interface IEntityProcessingService
+interface IPostEntityProcessingService
+interface BulletSPI
+interface IAsteroidSplitter
+interface IGamePluginService
+
+class BulletControlSystem implements IEntityProcessingService
+class BulletControlSystem implements BulletSPI
+class EntityControllerX implements IEntityProcessingService
+class AsteroidSplitterImpl implements IAsteroidSplitter
+class CollisionDetector implements IPostEntityProcessingService
+class EntityPluginX implements IGamePluginService
+@enduml

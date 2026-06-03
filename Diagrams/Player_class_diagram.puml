@@ -23,7 +23,7 @@ package "Player" as PM {
 
 PM ..> CP : requires
 
-PlayerPlugin --> Player : instantiates
-PlayerControlSystem --> Player : updates/uses
+PlayerPlugin ..> Player : instantiates
+PlayerControlSystem ..> Player : updates/uses
 
 @enduml

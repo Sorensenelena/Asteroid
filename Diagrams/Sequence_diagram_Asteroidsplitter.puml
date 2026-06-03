@@ -1,0 +1,31 @@
+@startuml
+title Asteroid Split Sequence
+
+actor Player
+participant "Bullet" as B
+participant "CollisionDetector" as CD
+participant "Asteroid" as A
+participant "AsteroidProcessor" as AP
+participant "AsteroidSplitter" as AS
+participant "World" as W
+
+activate B
+Player -> B : fire bullet
+B -> CD : collides with asteroid
+deactivate B
+
+activate CD
+CD -> A : mark as hit
+CD -> W : remove bullet
+deactivate CD
+
+activate AP
+AP -> A : check if hit
+AP -> AS : split asteroid
+activate AS
+AS -> W : add two fragments
+AS -> W : remove original asteroid
+deactivate AS
+deactivate AP
+
+@enduml

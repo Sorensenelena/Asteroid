@@ -68,6 +68,7 @@ public class Entity implements Serializable {
     public Color getColor() {
         return color == null ? color = Color.BLACK : color;
     }
+
     public void setHealth(int health) {
         this.health = health;
     }
