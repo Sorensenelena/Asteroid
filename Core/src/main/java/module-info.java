@@ -6,6 +6,7 @@ module Core {
     requires CommonBullet;
 
     requires javafx.graphics;
+    requires java.net.http;
 
     requires spring.context;
     requires spring.core;

@@ -12,18 +12,18 @@
 
   <modules>
     <module>Common</module>
-    <module>CommonAsteroids</module>
-    <module>CommonEnemy</module>
     <module>CommonPlayer</module>
-    <module>Core</module>
+    <module>CommonEnemy</module>
+    <module>CommonBullet</module>
+    <module>CommonAsteroids</module>
+    <module>Collision</module>
+    <module>Asteroids</module>
+    <module>Enemy</module>
     <module>Player</module>
     <module>Bullet</module>
-    <module>Enemy</module>
-    <module>CommonBullet</module>
-    <module>Asteroids</module>
-    <module>Collision</module>
+    <module>Core</module>
+    <module>ScoringSystem</module>
   </modules>
-
   <properties>
     <java>java</java>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

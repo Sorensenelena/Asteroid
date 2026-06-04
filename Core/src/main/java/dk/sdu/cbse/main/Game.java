@@ -12,14 +12,19 @@ import javafx.scene.shape.Polygon;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 class Game {
-    // TODO: in collision check entity health and add game over screen here
-    // TODO: also update draw() method to show health above each entity
+
+    private Text score;
+    private HttpClient client = HttpClient.newHttpClient();
 
     private final GameData gameData = new GameData();
     private final World world = new World();
@@ -29,16 +34,28 @@ class Game {
     private final List<IEntityProcessingService> entityProcessingServiceList;
     private final List<IPostEntityProcessingService> postEntityProcessingServices;
 
-    public Game(List<IGamePluginService> gamePluginServices, List<IEntityProcessingService> entityProcessingServiceList, List<IPostEntityProcessingService> postEntityProcessingServices) {
+    public Game(List<IGamePluginService> gamePluginServices,
+                List<IEntityProcessingService> entityProcessingServiceList,
+                List<IPostEntityProcessingService> postEntityProcessingServices) {
         this.gamePluginServices = gamePluginServices;
         this.entityProcessingServiceList = entityProcessingServiceList;
         this.postEntityProcessingServices = postEntityProcessingServices;
     }
 
     public void start(Stage window) throws Exception {
-        Text text = new Text(10, 20, "Destroyed asteroids: 0");
+        score = new Text(10, 20, "Destroyed asteroids: 0");
         gameWindow.setPrefSize(gameData.getDisplayWidth(), gameData.getDisplayHeight());
-        gameWindow.getChildren().add(text);
+        gameWindow.getChildren().add(score);
+
+        try {
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create("http://localhost:8080/score/set/0"))
+                    .PUT(HttpRequest.BodyPublishers.ofString(""))
+                    .build();
+            client.send(request, HttpResponse.BodyHandlers.ofString());
+        } catch (IOException | InterruptedException e) {
+            System.err.println("Scoring service unavailable: " + e.getMessage());
+        }
 
         Scene scene = new Scene(gameWindow);
         scene.setOnKeyPressed(event -> {
@@ -51,11 +68,9 @@ class Game {
             if (event.getCode().equals(KeyCode.W)) {
                 gameData.getKeys().setKey(GameKeys.UP, true);
             }
-
             if (event.getCode().equals(KeyCode.SPACE)) {
                 gameData.getKeys().setKey(GameKeys.SPACE, true);
             }
-
             if (event.getCode().equals(KeyCode.S)) {
                 gameData.getKeys().setKey(GameKeys.DOWN, true);
             }
@@ -70,18 +85,14 @@ class Game {
             if (event.getCode().equals(KeyCode.W)) {
                 gameData.getKeys().setKey(GameKeys.UP, false);
             }
-
             if (event.getCode().equals(KeyCode.SPACE)) {
                 gameData.getKeys().setKey(GameKeys.SPACE, false);
             }
-
             if (event.getCode().equals(KeyCode.S)) {
                 gameData.getKeys().setKey(GameKeys.DOWN, false);
             }
-
         });
 
-        // Lookup all Game Plugins using ServiceLoader
         for (IGamePluginService iGamePlugin : getGamePluginServices()) {
             iGamePlugin.start(gameData, world);
         }
@@ -103,7 +114,6 @@ class Game {
                 draw();
                 gameData.getKeys().update();
             }
-
         }.start();
     }
 
@@ -113,6 +123,17 @@ class Game {
         }
         for (IPostEntityProcessingService postEntityProcessorService : getPostEntityProcessingServices()) {
             postEntityProcessorService.process(gameData, world);
+        }
+
+        try {
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create("http://localhost:8080/score/get"))
+                    .GET().build();
+            HttpResponse<String> response = client.send(
+                    request, HttpResponse.BodyHandlers.ofString());
+            score.setText("Destroyed asteroids: " + response.body());
+        } catch (IOException | InterruptedException e) {
+            System.err.println("Scoring service unavailable: " + e.getMessage());
         }
     }
 
@@ -149,5 +170,4 @@ class Game {
     public List<IPostEntityProcessingService> getPostEntityProcessingServices() {
         return postEntityProcessingServices;
     }
-
 }

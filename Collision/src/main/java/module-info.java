@@ -6,5 +6,6 @@ module Collision {
     requires CommonEnemy;
     requires CommonBullet;
     requires CommonPlayer;
+    requires java.net.http;
     provides IPostEntityProcessingService with dk.sdu.collisionsystem.CollisionDetector;
 }

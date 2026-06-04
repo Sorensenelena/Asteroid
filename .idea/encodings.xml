@@ -27,9 +27,13 @@
     <file url="file://$PROJECT_DIR$/Map/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/Player/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/Player/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ScoringSystem/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ScoringSystem/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/my-module-name/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/my-module-name/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/../../../../Windows/System32/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/../../../../Windows/System32/src/main/resources" charset="UTF-8" />
   </component>
 </project>

@@ -9,10 +9,18 @@ import dk.sdu.cbse.common.enemy.Enemy;
 import dk.sdu.cbse.common.bullet.Bullet;
 import dk.sdu.cbse.common.player.Player;
 
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.io.IOException;
+
 public class CollisionDetector implements IPostEntityProcessingService {
 
     public CollisionDetector() {
     }
+
+    HttpClient client = HttpClient.newHttpClient();
 
     @Override
     public void process(GameData gameData, World world) {
@@ -45,6 +53,7 @@ public class CollisionDetector implements IPostEntityProcessingService {
                                 entity2.setHealth(entity2.getHealth() - 1);
                                 ((Asteroid) entity2).setHit(true);
                                 world.removeEntity(entity1);
+                                incrementScore(1); // added
                             }
                             if (entity2 instanceof Enemy) {
                                 entity2.setHealth(entity2.getHealth() - 1);
@@ -69,6 +78,17 @@ public class CollisionDetector implements IPostEntityProcessingService {
         }
     }
 
+    private void incrementScore(int i) {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:8080/score/add/" + i))
+                .PUT(HttpRequest.BodyPublishers.ofString(""))
+                .build();
+        try {
+            client.send(request, HttpResponse.BodyHandlers.ofString());
+        } catch (IOException | InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public Boolean collides(Entity entity1, Entity entity2) {
         float dx = (float) entity1.getX() - (float) entity2.getX();
@@ -76,5 +96,4 @@ public class CollisionDetector implements IPostEntityProcessingService {
         float distance = (float) Math.sqrt(dx * dx + dy * dy);
         return distance < (entity1.getRadius() + entity2.getRadius());
     }
-
 }
